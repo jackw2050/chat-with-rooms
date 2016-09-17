@@ -4,7 +4,9 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);// Set http as an express server
 var io = require('socket.io')(http);// Set io as a http socket
-
+var https = require('https');
+var querystring = require('querystring');
+// var fabric = require('fabric');
 app.use(express.static(__dirname + '/public'));
 
 var clientInfo = {};
@@ -50,3 +52,16 @@ io.on('connection', function (socket) {
 http.listen(PORT, function () {
 	console.log('Server started!');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+

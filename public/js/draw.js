@@ -1,22 +1,60 @@
-var canvas = new fabric.Canvas('c');
 
 
-var $formButton = jQuery('#message-form');
+var $ = function(id){return document.getElementById(id)};
+
+  var canvas = this.__canvas = new fabric.Canvas('c', {
+    isDrawingMode: false
+
+  });
+console.log(canvas.isDrawingMode);
+  fabric.Object.prototype.transparentCorners = false;
+
+
+     //   var canvas = new fabric.Canvas('canvas');
+
+        var rect = new fabric.Rect({
+            top : 100,
+            left : 100,
+            width : 60,
+            height : 70,
+            fill : 'red'
+        });
+
+        
 
 
 
-var drawingModeEl = document.getElementById('drawing-mode'),
-      drawingOptionsEl = document.getElementById('drawing-mode-options'),
-      drawingColorEl = document.getElementById('drawing-color'),
-      drawingLineWidthEl = document.getElementById('drawing-line-width'),
-      drawingShadowWidth = document.getElementById('drawing-shadow-width');
 
-  //drawingModeEl.onclick = function() {
 
-$('#drawing-mode').on('click', function(){
-console.log("click");
+  var drawingModeEl = $('drawing-mode'),
+      drawingOptionsEl = $('drawing-mode-options'),
+      drawingColorEl = $('drawing-color'),
+      drawingShadowColorEl = $('drawing-shadow-color'),
+      drawingLineWidthEl = $('drawing-line-width'),
+      drawingShadowWidth = $('drawing-shadow-width'),
+      drawingShadowOffset = $('drawing-shadow-offset'),
+      clearEl = $('clear-canvas');
 
-    canvas.isDrawingMode = !canvas.isDrawingMode;
+
+
+
+
+
+  clearEl.onclick = function() { canvas.clear() };
+
+
+
+
+
+
+  drawingModeEl.onclick = function() {
+    console.log("set drawing mode on");
+    console.log(JSON.stringify(canvas, null, 2));
+    canvas.add(rect);
+    // canvas.isDrawingMode = true;
+   canvas.isDrawingMode = !canvas.isDrawingMode;
+    console.log(canvas.isDrawingMode);
+    //console.log(JSON.stringify(canvas, null, 2));
     if (canvas.isDrawingMode) {
       drawingModeEl.innerHTML = 'Cancel drawing mode';
       drawingOptionsEl.style.display = '';
@@ -27,9 +65,12 @@ console.log("click");
     }
   };
 
-  canvas.on('path:created', function() {
-    updateComplexity();
-  });
+
+
+
+
+
+
 
   if (fabric.PatternBrush) {
     var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -106,14 +147,14 @@ console.log("click");
       return patternCanvas;
     };
 
-    var img = new Image();
-    img.src = '../assets/honey_im_subtle.png';
+    // var img = new Image();
+    // img.src = '../assets/honey_im_subtle.png';
 
-    var texturePatternBrush = new fabric.PatternBrush(canvas);
-    texturePatternBrush.source = img;
+    // var texturePatternBrush = new fabric.PatternBrush(canvas);
+    // texturePatternBrush.source = img;
   }
 
-  document.getElementById('drawing-mode-selector').addEventListener('change', function() {
+  $('drawing-mode-selector').onchange = function() {
 
     if (this.value === 'hline') {
       canvas.freeDrawingBrush = vLinePatternBrush;
@@ -139,16 +180,33 @@ console.log("click");
       canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
       canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
     }
-  });
+  };
 
   drawingColorEl.onchange = function() {
-    canvas.freeDrawingBrush.color = drawingColorEl.value;
+    canvas.freeDrawingBrush.color = this.value;
+  };
+  drawingShadowColorEl.onchange = function() {
+    canvas.freeDrawingBrush.shadowColor = this.value;
   };
   drawingLineWidthEl.onchange = function() {
-    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+
+    console.log(JSON.stringify(canvas, null, 2));
+
+
+
+    canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+
+    this.previousSibling.innerHTML = this.value;
+
   };
   drawingShadowWidth.onchange = function() {
-    canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
+    canvas.freeDrawingBrush.shadowBlur = parseInt(this.value, 10) || 0;
+    this.previousSibling.innerHTML = this.value;
+  };
+  drawingShadowOffset.onchange = function() {
+    canvas.freeDrawingBrush.shadowOffsetX =
+    canvas.freeDrawingBrush.shadowOffsetY = parseInt(this.value, 10) || 0;
+    this.previousSibling.innerHTML = this.value;
   };
 
   if (canvas.freeDrawingBrush) {
@@ -156,8 +214,3 @@ console.log("click");
     canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
     canvas.freeDrawingBrush.shadowBlur = 0;
   }
-
-  document.getElementById('canvas-background-picker').addEventListener('change', function() {
-    canvas.backgroundColor = this.value;
-    canvas.renderAll();
-  });
