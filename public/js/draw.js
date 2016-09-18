@@ -1,5 +1,6 @@
 
 
+
 var $ = function(id){return document.getElementById(id)};
 
   var canvas = this.__canvas = new fabric.Canvas('c', {
@@ -12,13 +13,7 @@ console.log(canvas.isDrawingMode);
 
      //   var canvas = new fabric.Canvas('canvas');
 
-        var rect = new fabric.Rect({
-            top : 100,
-            left : 100,
-            width : 60,
-            height : 70,
-            fill : 'red'
-        });
+
 
         
 
@@ -43,17 +38,29 @@ console.log(canvas.isDrawingMode);
   clearEl.onclick = function() { canvas.clear() };
 
 
+canvas.on('mouse:down', function(options) {
+  console.log(options.e.clientX, options.e.clientY);
+});
+
+canvas.on('mouse:move', function(options) {
+  console.log(options.e.clientX, options.e.clientY);
+});
+canvas.on('mouse:up', function(options) {
+  console.log(options.e.clientX, options.e.clientY);
+});
+
+canvas.on('Rect:added', function() {
+  console.log('added a rectangle' + Rect);
+});
 
 
 
 
   drawingModeEl.onclick = function() {
-    console.log("set drawing mode on");
-    console.log(JSON.stringify(canvas, null, 2));
-    canvas.add(rect);
+   // console.log(JSON.stringify(canvas, null, 2));
+    
     // canvas.isDrawingMode = true;
    canvas.isDrawingMode = !canvas.isDrawingMode;
-    console.log(canvas.isDrawingMode);
     //console.log(JSON.stringify(canvas, null, 2));
     if (canvas.isDrawingMode) {
       drawingModeEl.innerHTML = 'Cancel drawing mode';
@@ -154,6 +161,15 @@ console.log(canvas.isDrawingMode);
     // texturePatternBrush.source = img;
   }
 
+
+
+
+
+
+
+
+
+
   $('drawing-mode-selector').onchange = function() {
 
     if (this.value === 'hline') {
@@ -214,3 +230,58 @@ console.log(canvas.isDrawingMode);
     canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
     canvas.freeDrawingBrush.shadowBlur = 0;
   }
+
+// shapes
+
+  $('shape-selector').onchange = function() {
+console.log(this.value);
+    if (this.value === 'Line') {
+      canvas.add();
+    }
+    else if (this.value === 'Circle') {
+      canvas.add(new fabric.Circle({ top: 140, left: 230, radius: 75, fill: 'green' }));
+    }
+    else if (this.value === 'Square') {
+      canvas.add();
+    }
+    else if (this.value === 'Triangle') {
+      canvas.add(new fabric.Triangle({ top: 300, left: 210, width: 100, height: 100, fill: 'blue' }));
+    }
+    else if (this.value === 'Rectangle') {
+
+            var rect = new fabric.Rect({
+            top : 100,
+            left : 100,
+            width : 60,
+            height : 70,
+            fill : 'red'
+        });
+        canvas.add(rect);
+        console.log("rectangle added");
+    }
+   else if (this.value === 'Ellipse') {
+      
+    }
+      else if (this.value === 'Polygon') {
+      
+    }
+      else if (this.value === 'Group') {
+      
+    }
+      else if (this.value === 'Image') {
+      //   fabric.Image.fromURL('../lib/pug.jpg', function(img) {
+      // canvas.add(img.set({ left: 400, top: 350, angle: 30 }).scale(0.25));
+  // });
+    }
+
+
+
+
+
+  };
+
+
+
+
+
+
